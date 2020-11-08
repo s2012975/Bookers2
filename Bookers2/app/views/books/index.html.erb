@@ -1,0 +1,83 @@
+<% if @book.errors.any? %>
+  <div class="error-message">
+    <div class="alert alert-warning">
+      <ul>
+      	<p>error</p>
+          <% @book.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+
+<div class="container">
+  <div class="row">
+ 	  <div class="col-xs-3" style="">
+
+	 		<h1>User info</h1>
+	 		  <% if @user.profile_image != nil %>
+	        <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg' %>
+	      <% else %>
+	        <%= image_tag 'no_image_square', style: "height: 150px" %>
+	      <% end %>
+
+	 		<table class="table table-striped">
+	 			<tbody>
+	 				<tr>
+	 				  <td>Name</td>
+	 				  <td><%= @user.name %></td>
+	 				</tr>
+	 				<tr>
+	 					<td>Introduction</td>
+	 					<td><%= @user.introduction %></td>
+	 				</tr>
+	 			</tbody>
+	 		</table>
+
+      <div class="user-edit">
+		    <% if current_user.id == @user.id %>
+		      <%= link_to(edit_user_path(current_user.id), class: "user-edit-icon") do %>
+				    <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+		      <% end %>
+		    <% end %>
+		  </div>
+
+
+	    <h1>New book</h1>
+	      <%= form_for(@book) do |f| %>
+				  <p>Title</p>
+				    <%= f.text_field :title , class: "new-book-title"%>
+				  <p>Opinion</p>
+				    <%= f.text_area :body, class: "new-book-body"%>
+				  <br>
+				  <%= f.submit 'Create Book', class: "new-create-book btn-primary" %>
+	      <% end %>
+
+    </div>
+
+	  <div class="col-xs-9">
+	  	<h1>Books</h1>
+    	<table class="table table-striped">
+    		<thead>
+    			<tr>
+    				<th><P></P></th>
+    				<th><P>title</P></th>
+    				<th><P>opinion</P></th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    			<% @books.each do |book| %>
+      			<tr class="new-table">
+      				<td><span><%= link_to (attachment_image_tag book.user, :profile_image, :fill, 50, 50, format: 'jpeg', fallback: "no_image_square.jpg", size:'50x50'), user_path(book.user) %></span></td>
+      				<td><span><%= link_to book.title, "/books/#{book.id}"%></span></td>
+      				<td><span><%= book.body %></span></td>
+      			</tr>
+    			<% end %>
+    		</tbody>
+    	</table>
+
+	  </div>
+  </div>
+</div>
